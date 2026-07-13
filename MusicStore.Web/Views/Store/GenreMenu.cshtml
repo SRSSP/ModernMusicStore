@@ -1,0 +1,10 @@
+﻿@model IEnumerable<MusicStore.Domain.Entities.Genre>
+@foreach (var genre in Model)
+{
+    <li>
+        <a href="@Url.Action("Browse", "Store", new { Genre = genre.Name })">
+            <i class="fa fa-fw fa fa-suitcase"></i> @genre.Name
+        </a>
+
+    </li>
+}

@@ -1,0 +1,23 @@
+﻿<!--
+We’re using an IEnumerable<Genre> rather than a List<Genre> since it’s more generic,
+allowing us to change our model type later to any object type that supports the IEnumerable interface.
+-->
+@model IEnumerable<MusicStore.Domain.Entities.Genre>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Browse Genres</h3>
+
+<p> Select from @Model.Count() genres:</p>
+<ul>
+    @foreach (var genre in Model)
+    {
+        <!--
+        The scaffolding feature examined the Genre object and determined that each will have a Name property. 
+        Looping through and writes them out
+        -->
+        <li>@Html.ActionLink(genre.Name, "Browse", "Store", new { genre = genre.Name }, null)</li>
+    }
+</ul>

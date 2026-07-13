@@ -1,0 +1,401 @@
+﻿@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
+
+/***************************************************************************************/
+/**************************** Styles For HTML Tags *************************************/
+/***************************************************************************************/
+*
+{
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+body
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	background-color: #FBF9EF;
+	padding: 0px 6%;
+}
+@media(min-width:768px) {
+    body {
+        margin-top: 50px;
+    }
+    /*html, body, #wrapper, #page-wrapper {height: 100%; overflow: hidden;}*/
+}
+
+/* ul (unordered list) */
+ul {
+    list-style-type: square;
+    margin-left: 25px;
+    font-size: 14px;
+}
+
+    ul li a {
+        font-size: 16px;
+    }
+
+
+/* Tables */
+table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    color: #666666;
+    min-width: 500px;
+    width: 100%;
+}
+
+tr {
+    border: 1px solid #000;
+    line-height: 25px;
+}
+
+th {
+    background-color: #9b9993;
+    color: #000;
+    font-size: 13px;
+    text-align: left;
+}
+
+th, td {
+    padding-left: 5px;
+}
+
+tr:hover {
+    background-color: #fff;
+}
+
+
+/* Paragraghs */
+p {
+    margin-bottom: 15px;
+    margin-top: 0px;
+}
+
+    p em {
+        color: #9b9993;
+    }
+
+/* Headers */
+h2 {
+    color: #5e5b54;
+}
+
+h2, h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+h3, h4 {
+    color: #9B9993;
+}
+
+    #header h1 a, h3 em {
+        color: #5E5B54;
+    }
+
+/* Links */
+a:link, a:visited {
+    color: #F6855E;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #333333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:active {
+    color: #006633;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Fieldset & Legend */
+fieldset {
+    border: #9b9993 1px solid;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    clear: left;
+}
+legend {
+    padding: 10px;
+    font-weight: bold;
+}
+
+
+/* Inputs */
+input[type=text], input[type=password], select {
+    border: 1px solid #8A8575;
+    width: 300px;
+}
+
+/***************************************************************************************/
+/**************************** Styles For Form ******************************************/
+/***************************************************************************************/
+
+/* Form styles */
+div.editor-field {
+    margin-bottom: 10px;
+}
+
+/* Styles for validation helpers */
+.field-validation-error {
+    color: #ff0000;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+/*Styles for Albums list & Album Detail*/
+ul#album-list {
+    list-style: none;
+    margin-left: 0px;
+}
+
+    ul#album-list li {
+        height: 130px;
+        width: 100px;
+        float: left;
+        margin: 10px;
+        text-align: center;
+    }
+
+        ul#album-list li a, ul#album-list li .button {
+            font-size: 13px;
+            float: left;
+        }
+
+            ul#album-list li a span {
+                color: #9b9993;
+                text-decoration: underline;
+            }
+
+div#album-details p {
+    margin-bottom: 5px;
+    color: #5e5b54;
+    font-weight: bold;
+}
+
+
+.button, input[type=submit] {
+    clear: both;
+    display: inline-block;
+    padding: 5px;
+    margin-top: 10px;
+    border: 1px;
+    background: #5e5b54;
+    color: #fff;
+    font-weight: bold;
+}
+
+    .button a {
+        color: #fff !important;
+    }
+
+
+#update-message {
+    color: #F6855E;
+    font-weight: bold;
+}
+
+
+
+
+
+
+/***************************************************************************************/
+/*********************************Styles For Containers ********************************/
+/***************************************************************************************/
+
+#wrapper {
+    padding-left: 0;
+}
+
+#page-wrapper {
+    width: 100%;
+    padding: 0;
+    /*background-color: #fff;*/
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 225px;
+    }
+
+    #page-wrapper {
+        padding: 22px 10px;
+    }
+}
+
+#promotion {
+    height: 300px;
+    width: 100%;
+    /* Try common locations for the banner image. Ensure your image is placed under wwwroot/images/home-showcase.png
+       or wwwroot/content/Images/home-showcase.png. Use background-size to scale responsively. */
+    background-image: url('/images/home-showcase.png'), url('/content/Images/home-showcase.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+}
+
+#footer {
+    clear: both;
+    padding: 10px;
+    text-align: right;
+    border-top: 1px dotted #8A8575;
+    border-bottom: 1px dotted #8A8575;
+    font-family: Constantia, Georgia, serif;
+}
+
+
+
+/***************************************************************************************/
+/**************************** Styles For Top Navigation ********************************/
+/***************************************************************************************/
+/* Top Navigation */
+
+.top-nav {
+    padding: 0 15px;
+}
+
+    .top-nav > li {
+        display: inline-block;
+        float: left;
+    }
+
+        .top-nav > li > a {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            line-height: 20px;
+            color: #fff;
+        }
+
+            .top-nav > li > a:hover,
+            .top-nav > li > a:focus,
+            .top-nav > .open > a,
+            .top-nav > .open > a:hover,
+            .top-nav > .open > a:focus {
+                color: #fff;
+                background-color: #1a242f;
+            }
+
+    .top-nav > .open > .dropdown-menu {
+        float: left;
+        position: absolute;
+        margin-top: 0;
+        /*border: 1px solid rgba(0,0,0,.15);*/
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        background-color: #fff;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    }
+
+        .top-nav > .open > .dropdown-menu > li > a {
+            white-space: normal;
+            font-size: 12px;
+        }
+
+
+/***************************************************************************************/
+/**************************** Styles For Sidebar Navigation ****************************/
+/***************************************************************************************/
+
+/* Side Navigation */
+@media(min-width:768px) {
+    .side-nav {
+        position: fixed;
+        top: 60px;
+        left: 225px;
+        width: 225px;
+        margin-left: -225px;
+        border: none;
+        border-radius: 0;
+        border-top: 1px rgba(0,0,0,.5) solid;
+        overflow-y: auto;
+        background-color: #222;
+        /*background-color: #5A6B7D;*/
+        bottom: 0;
+        overflow-x: hidden;
+        padding-bottom: 40px;
+    }
+
+        .side-nav > li > a {
+            width: 225px;
+            border-bottom: 1px rgba(0,0,0,.3) solid;
+        }
+
+        .side-nav li a:hover,
+        .side-nav li a:focus {
+            outline: none;
+            background-color: #1a242f !important;
+        }
+}
+
+.side-nav > li > ul {
+    padding: 0;
+    border-bottom: 1px rgba(0,0,0,.3) solid;
+}
+
+    .side-nav > li > ul > li > a {
+        display: block;
+        padding: 10px 15px 10px 38px;
+        text-decoration: none;
+        /*color: #999;*/
+        color: #fff;
+    }
+
+        .side-nav > li > ul > li > a:hover {
+            color: #fff;
+        }
+
+.navbar .nav > li > a > .label {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    position: absolute;
+    top: 14px;
+    right: 6px;
+    font-size: 10px;
+    font-weight: normal;
+    min-width: 15px;
+    min-height: 15px;
+    line-height: 1.0em;
+    text-align: center;
+    padding: 2px;
+}
+
+.navbar .nav > li > a:hover > .label {
+    top: 10px;
+}
+
+.navbar-brand {
+    padding: 5px 15px;
+}
+    .navbar-brand a {
+        font-size: 18px;
+        float: left;
+        color: #F6855E;
+        /*padding: 45px 0px 5px 0px;*/
+    }

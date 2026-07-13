@@ -1,0 +1,10 @@
+@{
+	var genres = ViewData.Model as IEnumerable<MusicStore.Domain.Entities.Genre> ?? Enumerable.Empty<MusicStore.Domain.Entities.Genre>();
+}
+
+@foreach (var genre in genres)
+{
+	<li>
+		<a href="@Url.Action("Browse", "Store", new { id = genre.GenreId })">@genre.Name</a>
+	</li>
+}

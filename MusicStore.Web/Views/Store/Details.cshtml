@@ -1,0 +1,38 @@
+﻿@model MusicStore.Domain.Entities.Album
+@{
+    // Be defensive: Model may be null when the controller returns a 404 or similar.
+    var title = Model?.Title ?? "(unknown)";
+    ViewBag.Title = "Album - " + title;
+}
+
+@if (Model == null)
+{
+    <h2>Album not found</h2>
+    <p>The requested album could not be found.</p>
+}
+else
+{
+    <h2>@Model.Title</h2>
+    <p>
+        @{ var src = !string.IsNullOrEmpty(Model?.AlbumArtUrl) ? Url.Content(Model.AlbumArtUrl) : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect fill='%23f8f8f8' width='100%' height='100%'/><text x='50%' y='50%' alignment-baseline='middle' text-anchor='middle' fill='%23999' font-size='18'>No Image</text></svg>"; }
+        <img alt="@Model.Title" src="@src" />
+    </p>
+    <div id="album-details">
+        <p>
+            <em>Genre:</em> @Model.Genre?.Name
+        </p>
+        <p>
+            <em>Artist:</em> @Model.Artist?.Name
+        </p>
+        <p>
+            <em>Price:</em> @String.Format("{0:F}", Model.Price)
+        </p>
+        <p class="button">
+            @using (Html.BeginForm("AddToCart", "ShoppingCart", new { id = Model.AlbumId }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="Add to cart" class="btn btn-default" />
+            }
+        </p>
+    </div>
+}

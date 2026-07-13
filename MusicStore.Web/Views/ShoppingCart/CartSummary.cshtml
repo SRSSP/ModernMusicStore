@@ -1,0 +1,8 @@
+﻿@*Html.ActionLink("Cart (" + ViewData["CartCount"] + ")",
+    "Index",
+    "ShoppingCart",
+    new { id = "cart-status" })
+*@
+<a href="@Url.Action("Index", "ShoppingCart")">
+    <i class="fa fa-fw fa fa-shopping-cart"></i> <span id="cart-status">Cart (@ViewData["CartCount"])</span>
+</a>

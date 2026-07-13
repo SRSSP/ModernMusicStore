@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - MUSIC STORE</title>
+
+    @* REFACTOR: Replaced @Styles.Render with explicit link tags for .NET 8 compatibility *@
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" asp-append-version="true" />
+</head>
+<body>
+    @* REFACTOR: Moved inline style to CSS class for separation of concerns *@
+    <div id="throbber" class="throbber-hidden"></div>
+    <div id="noty-holder"></div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">
+                    <a href="@Url.Action("Index", "Home")">
+                        <img alt="MUSIC STORE" src="~/images/logo.png" /> <span>MUSIC STORE</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Top Menu Items -->
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-left top-nav">
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                <ul class="nav navbar-right top-nav">
+                    <li>@await Component.InvokeAsync("Cart")</li>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-fw fa-user"></i> Hello, @User.Identity.Name
+                            <b class="fa fa-angle-down"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="@Url.Action("ChangePassword", "Account")">
+                                    <i class="fa fa-fw fa-cog"></i> Change Password
+                                </a>
+                            </li>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="@Url.Action("Index", "StoreManager")">
+                                        <i class="fa fa-fw fa-cogs"></i> Manage Store
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="divider"></li>
+                            <li>
+                                @* Use a concrete action URL to avoid any tag-helper/routing mismatch; keep antiforgery token. *@
+                                <form action="@Url.Action("LogOff", "Account")" method="post" class="navbar-form">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-link" style="color:inherit; padding:6px 20px; text-align:left; width:100%;">
+                                        <i class="fa fa-fw fa-power-off"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("LogOn", "Account")">
+                            <i class="fa fa-fw fa-sign-in"></i> Login
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div> <!-- /.navbar-collapse -->
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                    @await Component.InvokeAsync("GenreMenu")
+            </ul>
+        </div>
+    </nav>
+
+    <div id="page-wrapper">
+        <main>
+            @RenderBody()
+        </main>
+        <div id="footer">
+            <footer>
+                <p>&copy; @DateTime.Now.Year - MUSIC STORE</p>
+            </footer>
+        </div>
+    </div><!-- /#page-wrapper -->
+</div><!-- /#wrapper -->
+@* REFACTOR: Replaced @Scripts.Render with explicit script tags for .NET 8 compatibility *@
+<!-- Load the exact jQuery file present in the project. -->
+<script src="~/js/jquery-3.3.1.min.js" asp-append-version="true"></script>
+<script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
+@RenderSection("scripts", required: false)
+</body>
+</html>

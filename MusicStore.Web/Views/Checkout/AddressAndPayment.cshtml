@@ -1,0 +1,103 @@
+﻿@model MusicStore.Domain.Entities.Order
+
+@{
+    ViewBag.Title = "Address And Payment";
+}
+
+@using (Html.BeginForm("AddressAndPayment", "Checkout", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+
+    <h2>Address And Payment</h2>
+    @Html.ValidationSummary(true, "Please correct the errors and try again.")
+
+    <fieldset>
+        <legend>Shipping Information</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.Address)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Address)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.City)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.City)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.State)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.State, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.State)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.PostalCode)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PostalCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.Country)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Country, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Country)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.Phone)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Phone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(m => m.Email)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Payment</legend>
+        <p>We're running a promotion: all music is free with the promo code: "FREE"</p>
+
+        <div class="editor-label">
+            @Html.Label("Promo Code")
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("PromoCode", null, new { @class = "form-control" })
+        </div>
+    </fieldset>
+
+    <input type="submit" value="Submit Order" class="btn btn-default" />
+}

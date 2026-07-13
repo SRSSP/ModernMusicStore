@@ -1,0 +1,22 @@
+﻿@model IEnumerable<MusicStore.Domain.Entities.Album> 
+@{
+    ViewBag.Title = "ASP.NET MVC Music Store"; 
+}
+<div id="promotion">
+</div>
+<h3><em>Fresh</em> off the grill</h3>
+<ul id="album-list">
+    @foreach (var album in Model)
+    {
+        <li>
+            <a href="@Url.Action("Details", "Store", new { id = album.AlbumId })">
+                @{
+                    var src = !string.IsNullOrEmpty(album.AlbumArtUrl)
+                        ? Url.Content(album.AlbumArtUrl)
+                        : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><rect fill='%23f8f8f8' width='100%' height='100%'/><text x='50%' y='50%' alignment-baseline='middle' text-anchor='middle' fill='%23999' font-size='16'>No Image</text></svg>";
+                }
+                <img alt="@album.Title" src="@src" /> <span>@album.Title</span>
+            </a>
+        </li>
+    }
+</ul>
