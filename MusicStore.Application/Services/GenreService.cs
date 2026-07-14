@@ -20,5 +20,8 @@ namespace MusicStore.Application.Services
 
         public Task<Genre?> GetGenreByIdAsync(int genreId)
             => _genreRepository.GetByIdAsync(genreId);
+
+        public Task<Genre?> GetGenreByNameAsync(string genre)
+            => _genreRepository.GetGenreByNameAsync(genre);
     }
 }

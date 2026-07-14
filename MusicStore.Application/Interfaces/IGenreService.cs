@@ -8,5 +8,6 @@ namespace MusicStore.Application.Interfaces
     {
         Task<IEnumerable<Genre>> GetGenresAsync();
         Task<Genre?> GetGenreByIdAsync(int genreId);
+        Task<Genre?> GetGenreByNameAsync(string genre);
     }
 }

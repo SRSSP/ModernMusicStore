@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Application.Interfaces;
 using MusicStore.Domain.Entities;
 
 namespace MusicStore.Web.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private const string PromoCode = "FREE";
@@ -33,23 +35,25 @@ namespace MusicStore.Web.Controllers
         // POST: /Checkout/AddressAndPayment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddressAndPayment(Microsoft.AspNetCore.Http.IFormCollection values)
+        public async Task<IActionResult> AddressAndPayment([FromForm] Order order, [FromForm] string PromoCode)
         {
-            var order = new Order();
-
-            // Try to bind form values to the order instance
-            if (!await TryUpdateModelAsync(order))
+            if (!ModelState.IsValid)
             {
-                // binding failed - redisplay form with errors
+                var errors = ModelState
+               .Where(x => x.Value.Errors.Count > 0)
+               .Select(x => new { Field = x.Key, Errors = x.Value.Errors.Select(e => e.ErrorMessage) });
+
+                foreach (var error in errors)
+                    System.Diagnostics.Debug.WriteLine($"Field: {error.Field} → {string.Join(", ", error.Errors)}");
+
                 return View(order);
             }
 
             try
             {
-                var provided = values["PromoCode"].ToString();
-                if (!string.Equals(provided, PromoCode, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(PromoCode, CheckoutController.PromoCode, StringComparison.OrdinalIgnoreCase))
                 {
-                    // Promo code invalid - redisplay
+                    ModelState.AddModelError("PromoCode", "Invalid promo code.");
                     return View(order);
                 }
 
@@ -63,7 +67,7 @@ namespace MusicStore.Web.Controllers
             }
             catch
             {
-                // Something went wrong - redisplay with errors
+                ModelState.AddModelError(string.Empty, "An error occurred while processing your order.");
                 return View(order);
             }
         }

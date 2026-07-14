@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Application.Interfaces;
 using MusicStore.Domain.Entities;
 
 namespace MusicStore.Web.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class StoreManagerController : Controller
     {
         private readonly IAlbumService _albumService;

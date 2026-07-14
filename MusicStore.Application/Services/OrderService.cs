@@ -19,6 +19,9 @@ namespace MusicStore.Application.Services
 
         public async Task<Order> CreateOrderAsync(Order order, string cartId)
         {
+            if (string.IsNullOrWhiteSpace(order.Address))
+                throw new ArgumentException("Order Address cannot be null or empty.", nameof(order));
+
             // Transfer cart items to order details, clear cart, etc.
             var cartItems = await _cartRepository.GetCartItemsAsync(cartId);
             foreach (var item in cartItems)

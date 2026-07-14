@@ -18,6 +18,9 @@ namespace MusicStore.Infrastructure.Repositories
         public virtual async Task<T?> GetByIdAsync(int id)
             => await _dbSet.FindAsync(id);
 
+        public virtual async Task<T?> GetGenreByNameAsync(string name)
+            => await _dbSet.FindAsync(name);
+
         public virtual async Task<IEnumerable<T>> GetAllAsync()
             => await _dbSet.ToListAsync();
 

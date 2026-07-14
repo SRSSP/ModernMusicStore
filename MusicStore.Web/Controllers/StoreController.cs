@@ -33,6 +33,15 @@ namespace MusicStore.Web.Controllers
             return View(genre);
         }
 
+        // Add overload to support both patterns
+        public async Task<IActionResult> Browse(string genre)
+        {
+            var genreEntity = await _genreService.GetGenreByNameAsync(genre);
+            if (genreEntity == null)
+                return NotFound();
+            return View(genreEntity);
+        }
+
         // GET: /Store/Details/5
         public async Task<IActionResult> Details(int id)
         {

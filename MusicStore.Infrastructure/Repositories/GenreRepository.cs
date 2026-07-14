@@ -6,6 +6,7 @@ namespace MusicStore.Infrastructure.Repositories
 {
     public interface IGenreRepository : IRepository<Genre>
     {
+        //Task<string?> GetGenreByNameAsync(string genre);
     }
 }
 
@@ -20,6 +21,11 @@ namespace MusicStore.Infrastructure.Repositories
             return await _dbSet
                 .Include(g => g.Albums)
                 .FirstOrDefaultAsync(g => g.GenreId == id);
+        }
+
+        public override async Task<Genre?> GetGenreByNameAsync(string genre)
+        {
+            return await _dbSet.Include(g => g.Albums).FirstOrDefaultAsync(g => g.Name == genre);
         }
     }
 }
