@@ -39,7 +39,20 @@ namespace MusicStore.Web.Controllers
         {
             var cartId = GetCartId();
             await _cartService.AddToCartAsync(cartId, id);
-            return RedirectToAction("Index");
+            var album = await _albumService.GetAlbumByIdAsync(id);
+            var count = await _cartService.GetCartCountAsync(cartId);
+            var items = await _cartService.GetCartItemsAsync(cartId);
+            var total = items.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
+
+            return Json(new
+            {
+                Message = $"{album?.Title} has been added to your shopping cart.",
+                CartTotal = total.ToString("C"),
+                CartCount = count,
+                ItemCount = count,
+                DeleteId = 0
+            });
+            //return RedirectToAction("Index");
         }
 
         // POST: /ShoppingCart/RemoveFromCart/5
@@ -48,7 +61,21 @@ namespace MusicStore.Web.Controllers
         {
             var cartId = GetCartId();
             await _cartService.RemoveFromCartAsync(cartId, recordId);
-            return RedirectToAction("Index");
+
+            var album = await _albumService.GetAlbumByIdAsync(recordId);
+            var count = await _cartService.GetCartCountAsync(cartId);
+            var items = await _cartService.GetCartItemsAsync(cartId);
+            var total = items.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
+
+            return Json(new
+            {
+                Message = $"Items removed from your shopping cart.",
+                CartTotal = total.ToString("C"),
+                CartCount = count,
+                ItemCount = count,
+                DeleteId = 0
+            });
+            //return RedirectToAction("Index");
         }
 
         // POST: /ShoppingCart/EmptyCart
