@@ -23,6 +23,8 @@ namespace MusicStore.Web.Controllers
 
         // GET: /Store/Browse/5
         // The route passes the id segment (e.g. /Store/Browse/1) so bind to 'id' to ensure model binding works.
+        [HttpGet]
+        [Route("Store/BrowseById/{id:int}")]
         public async Task<IActionResult> Browse(int id)
         {
             // Load the genre (includes its Albums collection) because the view expects a Genre model
@@ -33,7 +35,9 @@ namespace MusicStore.Web.Controllers
             return View(genre);
         }
 
-        // Add overload to support both patterns
+        //Add overload to support both patterns
+        [HttpGet]
+        [Route("Store/Browse/{genre}")]
         public async Task<IActionResult> Browse(string genre)
         {
             var genreEntity = await _genreService.GetGenreByNameAsync(genre);

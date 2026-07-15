@@ -17,6 +17,15 @@ namespace MusicStore.Infrastructure.Repositories
     {
         public AlbumRepository(MusicStoreDbContext context) : base(context) { }
 
+        // Ensure Album lists include navigation properties so admin views do not hit null references
+        public override async Task<IEnumerable<Album>> GetAllAsync()
+        {
+            return await _dbSet
+                .Include(a => a.Artist)
+                .Include(a => a.Genre)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Album>> GetByGenreAsync(int genreId)
         {
             return await _dbSet

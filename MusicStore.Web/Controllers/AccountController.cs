@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Application.Interfaces;
@@ -101,6 +102,57 @@ namespace MusicStore.Web.Controllers
             // Sign out Identity cookie
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /Account/ChangePassword
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ChangePassword
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("LogOn");
+            }
+
+            var result = await _signInManager.UserManager.ChangePasswordAsync(
+                user,
+                model.OldPassword,
+                model.NewPassword
+            );
+
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction("ChangePasswordSuccess");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+        // GET: /Account/ChangePasswordSuccess
+        [Authorize]
+        public IActionResult ChangePasswordSuccess()
+        {
+            return View();
         }
     }
 }

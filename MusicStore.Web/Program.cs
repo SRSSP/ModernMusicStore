@@ -77,4 +77,43 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// create scope and seed roles/user
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+    // local seeder
+    async Task SeedAdminAsync()
+    {
+        const string adminRole = "Administrator";
+        const string adminEmail = "admin@musicstore.local";
+        const string adminUserName = "admin";
+        const string adminPassword = "Admin123!"; // must satisfy your configured password policy
+
+        // create role if missing
+        if (!await roleManager.RoleExistsAsync(adminRole))
+            await roleManager.CreateAsync(new IdentityRole(adminRole));
+
+        // create user if missing
+        var user = await userManager.FindByEmailAsync(adminEmail);
+        if (user == null)
+        {
+            user = new IdentityUser { UserName = adminUserName, Email = adminEmail, EmailConfirmed = true };
+            var createResult = await userManager.CreateAsync(user, adminPassword);
+            if (!createResult.Succeeded)
+            {
+                // handle or log errors if needed
+                return;
+            }
+        }
+
+        // ensure user is in role
+        if (!await userManager.IsInRoleAsync(user, adminRole))
+            await userManager.AddToRoleAsync(user, adminRole);
+    }
+
+    await SeedAdminAsync();
+}
 app.Run();
