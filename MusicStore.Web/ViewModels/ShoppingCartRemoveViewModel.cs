@@ -2,8 +2,8 @@
 {
     public class ShoppingCartRemoveViewModel
     {
-        public string Message { get; set; }
-        public decimal CartTotal { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public string CartTotal { get; set; } = string.Empty;
         public int CartCount { get; set; }
         public int ItemCount { get; set; }
         public int DeleteId { get; set; }

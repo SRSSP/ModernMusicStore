@@ -1,82 +1,122 @@
 ﻿@model MvcMusicStore.ViewModels.ShoppingCartViewModel
 @{
     ViewBag.Title = "Shopping Cart";
+    var cartCount = ViewBag.CartCount ?? 0;
+    var hasItems = cartCount > 0;
 }
 <h3>
     <em>Review</em> your cart:
 </h3>
-<p class="button">
-    @Html.ActionLink("Checkout >>", "AddressAndPayment", "Checkout")
-</p>
+@if (hasItems)
+{
+    <p class="button">
+        @Html.ActionLink("Checkout >>", "AddressAndPayment", "Checkout", null, new { @class = "btn btn-primary" })
+    </p>
+}
+else
+{
+    <p class="button">
+        <button type="button" class="btn btn-secondary" disabled title="Your cart is empty">
+            Checkout >>
+        </button>
+    </p>
+    <div class="alert alert-info">
+        <strong>Your cart is empty.</strong>
+        <a href="@Url.Action("Index", "Store")" class="alert-link">Browse our store</a> to add items.
+    </div>
+}
 <div id="update-message">
 </div>
-<table>
-    <tr>
-        <th>
-            Album Name
-        </th>
-        <th>
-            Price (each)
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model.CartItems)
-    {
-        <tr id="row-@item.RecordId">
+@if (hasItems)
+{
+    <table>
+        <tr>
+            <th>
+                Album Name
+            </th>
+            <th>
+                Price (each)
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr id="row-@item.RecordId">
+                <td>
+                    @Html.ActionLink(item.Album.Title, "Details", "Store", new { id = item.AlbumId }, null)
+                </td>
+                <td>
+                    @item.Album.Price
+                </td>
+                <td id="item-count-@item.RecordId">
+                    @item.Count
+                </td>
+                <td>
+                    <a href="#" class="RemoveLink" data-id="@item.RecordId">Remove from cart</a>
+                </td>
+            </tr>
+        }
+        <tr>
             <td>
-                @Html.ActionLink(item.Album.Title, "Details", "Store", new { id = item.AlbumId }, null)
+                Total
             </td>
             <td>
-                @item.Album.Price
-            </td>
-            <td id="item-count-@item.RecordId">
-                @item.Count
             </td>
             <td>
-                <a href="#" class="RemoveLink" data-id="@item.RecordId">Remove from cart</a>
+            </td>
+            <td id="cart-total">
+                @Model.CartTotal
             </td>
         </tr>
-    }
-    <tr>
-        <td>
-            Total
-        </td>
-        <td>
-        </td>
-        <td>
-        </td>
-        <td id="cart-total">
-            @Model.CartTotal
-        </td>
-    </tr>
-</table>
+    </table>
+}
 @section scripts {
     <script type="text/javascript">
         $(function () {
             // Document.ready -> link up remove event handler
-            $(".RemoveLink").click(function () {
+            $(".RemoveLink").click(function (e) {
+                 //e.preventDefault();
                 // Get the id from the link
                 var recordToDelete = $(this).attr("data-id");
 
                 if (recordToDelete != '') {
+                    //$link.text('Removing...').addClass('disabled');
 
                     // Perform the ajax post
                     $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
                         function (data) {
                             // Successful requests get here
                             // Update the page elements
-                            if (data.ItemCount == 0) {
-                                $('#row-' + data.DeleteId).fadeOut('slow');
+                            if (data.itemCount == 0) {
+                                $('#row-' + data.deleteId).fadeOut('slow');
                             } else {
-                                $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                                $('#item-count-' + data.deleteId).text(data.itemCount);
                             }
 
-                            $('#cart-total').text(data.CartTotal);
-                            $('#update-message').text(data.Message);
-                            $('#cart-status').text('Cart (' + data.CartCount + ')');
+                            $('#cart-total').text(data.cartTotal);
+                            $('#update-message').text(data.message);
+                            $('#cart-status').text('Cart (' + data.cartCount + ')');
+                            // ✅ Disable checkout button if cart is empty
+                            if (data.cartCount === 0) {
+                                $('.button').html(
+                                    '<button type="button" class="btn btn-secondary" disabled title="Your cart is empty">Checkout >></button>' +
+                                    '<div class="alert alert-info mt-3">' +
+                                    '<strong>Your cart is empty.</strong> ' +
+                                    '<a href="/Store" class="alert-link">Browse our store</a> to add items.' +
+                                    '</div>'
+                                );
+                                $('table').fadeOut('slow');
+                            }
+                        })
+                        .fail(function (xhr, status, error) {
+                            alert('Failed to remove item. Please try again.');
+                            console.error('Remove failed:', error);
+                        })
+                        .always(function () {
+                            $link.text('Remove from cart').removeClass('disabled');
                         });
                 }
             });
@@ -90,15 +130,15 @@
             var data = Sys.Serialization.JavaScriptSerializer.deserialize(json);
 
             // Update the page elements
-            if (data.ItemCount == 0) {
-                $('#row-' + data.DeleteId).fadeOut('slow');
+            if (data.itemCount == 0) {
+                $('#row-' + data.deleteId).fadeOut('slow');
             } else {
-                $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                $('#item-count-' + data.deleteId).text(data.itemCount);
             }
 
-            $('#cart-total').text(data.CartTotal);
-            $('#update-message').text(data.Message);
-            $('#cart-status').text('Cart (' + data.CartCount + ')');
+            $('#cart-total').text(data.cartTotal);
+            $('#update-message').text(data.message);
+            $('#cart-status').text('Cart (' + data.cartCount + ')');
         }
     </script>
 }

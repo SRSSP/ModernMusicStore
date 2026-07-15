@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using MusicStore.Application.Interfaces;
 
@@ -39,43 +39,50 @@ namespace MusicStore.Web.Controllers
         {
             var cartId = GetCartId();
             await _cartService.AddToCartAsync(cartId, id);
-            var album = await _albumService.GetAlbumByIdAsync(id);
-            var count = await _cartService.GetCartCountAsync(cartId);
-            var items = await _cartService.GetCartItemsAsync(cartId);
-            var total = items.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
+            //var album = await _albumService.GetAlbumByIdAsync(id);
+            //var count = await _cartService.GetCartCountAsync(cartId);
+            //var items = await _cartService.GetCartItemsAsync(cartId);
+            //var total = items.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
 
-            return Json(new
-            {
-                Message = $"{album?.Title} has been added to your shopping cart.",
-                CartTotal = total.ToString("C"),
-                CartCount = count,
-                ItemCount = count,
-                DeleteId = 0
-            });
-            //return RedirectToAction("Index");
+            //return Json(new
+            //{
+            //    Message = $"{album?.Title} has been added to your shopping cart.",
+            //    CartTotal = total.ToString("C"),
+            //    CartCount = count,
+            //    ItemCount = count,
+            //    DeleteId = 0
+            //});
+            return RedirectToAction("Index");
         }
 
         // POST: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
-        public async Task<IActionResult> RemoveFromCart(int recordId)
+        public async Task<IActionResult> RemoveFromCart(int id)
         {
             var cartId = GetCartId();
-            await _cartService.RemoveFromCartAsync(cartId, recordId);
 
-            var album = await _albumService.GetAlbumByIdAsync(recordId);
-            var count = await _cartService.GetCartCountAsync(cartId);
+            // Get album name before removal for user feedback
             var items = await _cartService.GetCartItemsAsync(cartId);
-            var total = items.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
+            var item = items.FirstOrDefault(i => i.RecordId == id);
+            var albumName = item?.Album?.Title ?? "Item";
 
-            return Json(new
+            // Remove the item
+            await _cartService.RemoveFromCartAsync(cartId, id);
+
+            // Get updated cart metrics
+            var updatedItems = (await _cartService.GetCartItemsAsync(cartId)).ToList();
+            var cartTotal = updatedItems.Sum(i => (i.Album?.Price ?? 0m) * i.Count);
+            var cartCount = await _cartService.GetCartCountAsync(cartId);
+            var itemCount = updatedItems.FirstOrDefault(i => i.RecordId == id)?.Count ?? 0;
+            // ✅ Use existing ViewModel
+            return Json(new MvcMusicStore.ViewModels.ShoppingCartRemoveViewModel
             {
-                Message = $"Items removed from your shopping cart.",
-                CartTotal = total.ToString("C"),
-                CartCount = count,
-                ItemCount = count,
-                DeleteId = 0
+                Message = $"{albumName} has been removed from your shopping cart.",
+                CartTotal = cartTotal.ToString("C"),
+                CartCount = cartCount,
+                ItemCount = itemCount,
+                DeleteId = id
             });
-            //return RedirectToAction("Index");
         }
 
         // POST: /ShoppingCart/EmptyCart
